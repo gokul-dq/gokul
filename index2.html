@@ -1,0 +1,405 @@
+﻿<!DOCTYPE html>
+<html lang="de" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+  
+
+  
+
+
+    <link rel="icon" href="logo.jpg" />
+    <link rel="shortcut icon" href="logo.jpg" />
+    <link rel="apple-touch-icon" href="logo.jpg" />
+    <link rel="apple-touch-startup-image" href="logo.jpg" />
+    <meta name="description" content="Projects from Lukas Kurz visible on https://github.com/ShortDevelopment/. C# Visual Basic .NET Xamarin Unity Arduino Minecraft Bedrock Windows Forms" />
+    <meta name="keywords" content="C# Visual Basic .NET Xamarin Unity Arduino Minecraft Bedrock Windows Forms" />
+    <title>ShortDevelopment</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href=".container.css"/>
+    
+    
+    <style>
+        body, html {
+            margin: 0px;
+            padding: 0px;
+            font-family: 'Roboto', bold;
+        }
+
+        body {
+            background-image: url('https://i.pinimg.com/originals/67/0d/c9/670dc9dcb465f6f9c85b441b4270f647.jpg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;  
+        background-size: cover;
+            transition: background 0.5s;
+        }
+
+        header {
+            width: 100%;
+            height: 50px;
+            text-align: right;
+            position: sticky;
+            top: 0px;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+            header a {
+                display: inline-block;
+                text-decoration: none;
+                color: black;
+                cursor: pointer;
+                height: 30px;
+                padding: 10px;
+                position: relative;
+                transition: background-color 0.2s;
+            }
+
+                header a img {
+                    height: 100%;
+                }
+
+                header a:hover {
+                    background-color: #E3F2FD;
+                }
+
+            header table {
+                width: 100%;
+                height: 100%;
+            }
+
+                header table img {
+                    margin-right: 5px;
+                }
+
+        .vr {
+            display: inline-block;
+            height: 20px;
+            margin: 15px 0px;
+            width: 1px;
+            box-sizing: border-box;
+            border-left: 1px solid lightgray;
+        }
+
+        .container {
+            width: 100%;
+            margin: 10px 0px;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .spacer {
+            width: 100%;
+            height: 15px;
+        }
+
+        .spacer_big {
+            width: 100%;
+            height: 50px;
+        }
+
+        .avatar {
+            display: inline-block;
+            width: 200px;
+            height: 200px;
+            background-image: url("logo.jpg");
+            background-size: auto 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 50%;
+            border: 10px solid #E3F2FD;
+        }
+
+        .name {
+            margin: 25px 0px;
+            color: #424242;
+        }
+
+            .name strong {
+                color: black;
+            }
+
+        .vertical_imgs, .vertical_label {
+            width: 100%;
+            text-align: center;
+        }
+
+            .vertical_imgs img {
+                width: 40px;
+                height: 40px;
+                display: inline-block;
+                margin: 5px;
+            }
+
+            .vertical_label label {
+                display: inline-block;
+                margin: 5px 10px;
+                font-weight: 500;
+            }
+    </style>
+    <script>
+
+        window.addEventListener("load", (e) => {
+            console.info("Ready!");
+            LoadNewPlan();
+            CheckTime();
+            
+            setInterval(() => { CheckTime(); }, 2000);
+        });
+
+        let lessonIndex = [
+            {
+                "start": "07:40",
+                "end": "08:25"
+            },
+            {
+                "start": "08:30",
+                "end": "09:15"
+            },
+            // Große Pause
+            {
+                "start": "09:35",
+                "end": "10:20"
+            },
+            {
+                "start": "10:25",
+                "end": "11:10"
+            },
+            // 10 min Pause
+            {
+                "start": "11:20",
+                "end": "12:05"
+            },
+            {
+                "start": "12:10",
+                "end": "12:55"
+            },
+            // Mittagspause
+            {
+                "start": "12:55",
+                "end": "12:55"
+            },
+            {
+                "start": "14:00",
+                "end": "14:45"
+            },
+            {
+                "start": "14:50",
+                "end": "15:35"
+            },
+
+            {
+                "start": "15:50",
+                "end": "16:35"
+            },
+            {
+                "start": "16:40",
+                "end": "17:25"
+            }
+        ];
+
+        let IsBreak = false;
+        let HasPlayedGong = false;
+        let ShouldPlayGong = false;
+
+        let CurrentLessonIndex = -1;
+
+        /**
+         * @type {Date}
+         * */
+        var time = new Date();
+
+        function CheckTime() {
+            //let timeObj = new Date();
+            //let currentTime = [timeObj.getHours(), timeObj.getMinutes(), timeObj.getSeconds()];
+
+            let firstLesson = lessonIndex[0];
+            let lastLesson = lessonIndex[lessonIndex.length - 1];
+            let firstLessonStart = GetDate([parseInt(firstLesson.start.split(":")[0]), parseInt(firstLesson.start.split(":")[1]), 0]);
+            let lastLessonEnd = GetDate([parseInt(lastLesson.end.split(":")[0]), parseInt(lastLesson.end.split(":")[1]), 0]);
+            if (time < firstLessonStart) {
+                CurrentLessonIndex = -2;
+                IsBreak = true;
+                ShouldPlayGong = false;
+            } else if (time > lastLessonEnd) {
+                CurrentLessonIndex = -3;
+                IsBreak = true;
+                ShouldPlayGong = false;
+            } else {
+                for (let i = 0; i < lessonIndex.length; i++) {
+                    let lesson = lessonIndex[i];
+                    let lessonStart = GetDate([parseInt(lesson.start.split(":")[0]), parseInt(lesson.start.split(":")[1]), 0]);                    
+                    let lessonEnd = GetDate([parseInt(lesson.end.split(":")[0]), parseInt(lesson.end.split(":")[1]), 0]);
+                    let nextlesson = (i < lessonIndex.length) ? lessonIndex[i + 1] : null;
+                    let nextlessonStart = (nextlesson) ? GetDate([parseInt(nextlesson.start.split(":")[0]), parseInt(nextlesson.start.split(":")[1]), 0]) : null;
+                    if (time >= lessonStart && time <= lessonEnd) {
+                        IsBreak = false;
+                        CurrentLessonIndex = i;
+                        break;
+                    } else if (nextlessonStart && time >= lessonEnd && time <= nextlessonStart) {
+                        IsBreak = true;
+                        CurrentLessonIndex = i + 1;
+                        break;
+                    } else {
+                        IsBreak = true;
+                    }
+                }
+            }
+           
+            if (CurrentLessonIndex >= 0) {
+                let lesson = lessonIndex[CurrentLessonIndex];
+                let lessonStart = GetDate([parseInt(lesson.start.split(":")[0]), parseInt(lesson.start.split(":")[1]), 0]);
+                let lessonEnd = GetDate([parseInt(lesson.end.split(":")[0]), parseInt(lesson.end.split(":")[1]), 0]);
+                if (time >= lessonStart && time <= lessonEnd) {
+                    IsBreak = false;
+                    let diff = (lessonEnd - time) / (1000 * 60);
+                    let min = parseInt(diff);
+                    let sec = (diff - min) * 60;
+                    document.getElementById("time").innerHTML = `Noch ${min} min ${Math.round(sec)} sec <b>Unterricht</b>`;                    
+                    if (time.getTime() > (lessonStart.getTime() + 1000 * 60) && time <= lessonEnd) {
+                        HasPlayedGong = false;
+                    }
+                } else {
+                    IsBreak = true;
+                    let diff = (lessonStart - time) / (1000 * 60);
+                    let min = parseInt(diff);
+                    let sec = (diff - min) * 60;
+                    document.getElementById("time").innerHTML = `Noch ${min} min ${Math.round(sec)} sec <b>Pause</b>`;
+                }
+
+                let lastLesson = CurrentLessonIndex == 0 ? null : lessonIndex[CurrentLessonIndex - 1];
+                let lastlessonEnd = lastLesson ? GetDate([parseInt(lastLesson.end.split(":")[0]), parseInt(lastLesson.end.split(":")[1]), 0]) : null;
+
+                if (lessonStart.getTime() == GetDate([time.getHours(), time.getMinutes(), 0]).getTime()) {
+                    if (!HasPlayedGong) { PlayGong(); }
+                    HasPlayedGong = true;
+                } else if (lastlessonEnd && lastlessonEnd.getTime() == GetDate([time.getHours(), time.getMinutes(), 0]).getTime()) {
+                    if (!HasPlayedGong) { PlayGong(); }
+                    HasPlayedGong = true;
+                } else {
+                    if (time > (lastlessonEnd.getTime() + 1000 * 60) && time < lessonStart) {
+                        HasPlayedGong = false;
+                    }
+                }
+
+                document.getElementById("lessonIndex").innerHTML = IsBreak ? `Pause => ${CurrentLessonIndex + 1}. Stunde` : `${CurrentLessonIndex + 1}. Stunde`;
+                document.getElementById("status").innerHTML = IsBreak ? "Pause" : "Unterricht";                
+
+            }else if (CurrentLessonIndex == -2) {
+                document.getElementById("lessonIndex").innerHTML = `Vor Unterricht`;
+                document.getElementById("status").innerHTML = "Frei";
+                document.getElementById("time").innerHTML = "Nicht mehr einschlafen!";
+            } else if (CurrentLessonIndex == -3) {
+                document.getElementById("lessonIndex").innerHTML = `Nach Unterricht`;
+                document.getElementById("status").innerHTML = "Frei";
+                document.getElementById("time").innerHTML = "Bis morgen!";
+            }
+
+            // time = new Date(time.getTime() + 1000 * 1);
+
+            time = new Date();
+
+        }
+        function GetDate(array) {
+            let date = new Date();
+            date.setHours(array[0]);
+            date.setMinutes(array[1]);
+            date.setSeconds(array[2]);
+            return date;
+        }
+        function LoadNewPlan() {
+
+        }
+        function PlayGong() {
+            /**
+             * @type {HTMLAudioElement}
+             * */
+            let ele = document.getElementById("gong");
+            ele.pause();
+            ele.currentTime = 0;
+            ele.play();
+        }
+    </script>
+</head>
+<body>
+    <audio id="gong" src="file:///C:/Users/user/OneDrive/Desktop/School-Bell-Extended-main/docs/Schulgong.mp3" autoplay preload="auto"></audio>
+    <div class="card" style="min-height: calc(100vh - 50px);" data-background="rgb(255, 255, 255)">
+        <div>
+            <a name="me" class="anchor"></a>
+            <div class="spacer_big"></div>
+            <div class="container center">
+                <div class="avatar"></div>
+                <div class="name"><strong>School Bell Extended</strong></div>
+                <div class="name" id="status"></div>
+            </div>
+            <div class="spacer"></div>
+            <div class="container center">
+                <h2>Zeit</h2>
+                <div class="time" id="time"></div>
+            </div>
+            <div class="spacer"></div>
+            <div class="container center">
+                <h2 id="lessonIndex"></h2>
+                <div class="plan">
+                    <div class="subject"></div>
+                    <div class="teacher"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+
+<button 
+
+
+id="myButton" class="float-right submit-button" ><i class="fa fa-microphone"></i>ANNOUNCE</button> 
+
+
+  
+    
+    
+    
+    </body>
+    </html>
+    
+    
+<script type="text/javascript">
+    document.getElementById("myButton").onclick = function () {
+        location.href = "indexl.html";
+
+        
+
+        
+    };
+    
+</script>
+
+
+
+
+<!DOCTYPE html>
+<head>
+    
+  <title> 
+    
+</title>
+</head>
+<body>
+  <input type="file" id="musicFile" accept="audio/*">
+  <button onclick="playMusic()">Play</button>
+  <audio id="musicPlayer" controls=""></audio>
+  <script>
+    function playMusic() {
+      var musicFile = document.getElementById("musicFile").files[0];
+      var musicPlayer = document.getElementById("musicPlayer");
+      musicPlayer.src = URL.createObjectURL(musicFile);
+      musicPlayer.play();
+    }
+  </script>
+</body>

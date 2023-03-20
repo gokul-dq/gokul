@@ -1,0 +1,48 @@
+button{
+    border-radius: 5px;
+    padding: 5px;
+    margin: 10px;
+    font-size: 10px;
+    text-align: center;
+    background-color: #f0e4ee; /* Green */
+    border: none;
+    color: rgb(252, 253, 252);
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+
+
+    button{
+        border-radius: 5px;
+        padding: 5px;
+        margin: 10px;
+        font-size: 8px;
+        text-align: center;
+        background-color: #8a1763; /* Green */
+        border: none;
+        color: rgb(252, 253, 252);
+        padding: 5px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+
+    label {
+        background-color: rgb(127, 78, 163);
+        color: white;
+        padding: 0.5rem;
+        font-family: sans-serif;
+        border-radius: 0.3rem;
+        cursor: pointer;
+        margin-top: 1rem;
+      }
